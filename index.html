@@ -3,15 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Web Compass</title>
+  <title>Compass</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="compass-container">
+    <div class="heading-info">
+      <p>Current Location <span title="Shows device heading">ℹ️</span></p>
+      <h1 id="degree">--° --</h1>
+    </div>
+
     <div class="compass">
       <div class="needle" id="needle"></div>
     </div>
-    <div id="direction">Direction: N/A</div>
+
+    <div id="flag" class="hidden">FLAG{1234567890}</div>
   </div>
 
   <script src="script.js"></script>
