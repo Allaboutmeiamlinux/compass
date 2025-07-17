@@ -1,61 +1,25 @@
-let map, marker;
-const needle = document.querySelector('.needle');
-const headingText = document.getElementById('heading');
+window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+window.addEventListener("deviceorientation", handleOrientation, true);
 
-function permissionFlow() {
-  if (DeviceOrientationEvent.requestPermission) {
-    DeviceOrientationEvent.requestPermission()
-      .then(res => res === 'granted' && 
-            window.addEventListener('deviceorientationabsolute', updateOrientation))
-      .catch(err => console.warn('Orientation permission not granted', err));
-  } else {
-    window.addEventListener('deviceorientationabsolute', updateOrientation);
+function handleOrientation(event) {
+  const needle = document.getElementById("needle");
+  const directionDisplay = document.getElementById("direction");
+
+  let heading = event.alpha;
+
+  if (typeof event.webkitCompassHeading !== "undefined") {
+    heading = event.webkitCompassHeading;
   }
-}
 
-function updateOrientation(e) {
-  const alpha = e.alpha;
-  if (alpha != null) {
-    const deg = Math.round(alpha);
-    needle.style.transform = `translateX(-50%) rotate(${-deg}deg)`;
-    const dir = getCompassDirection(deg);
-    headingText.textContent = `Heading: ${deg}° (${dir})`;
+  if (heading !== null) {
+    needle.style.transform = `translateX(-50%) rotate(${-heading}deg)`;
+    const compassDir = getCompassDirection(heading);
+    directionDisplay.textContent = `Direction: ${compassDir}`;
   }
 }
 
 function getCompassDirection(deg) {
-  const dirs = ["N","NE","E","SE","S","SW","W","NW","N"];
-  return dirs[Math.round(deg / 45)];
+  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'];
+  const index = Math.round(deg / 45);
+  return directions[index];
 }
-
-function startMap() {
-  if (!navigator.geolocation) return alert('Geolocation not supported');
-  navigator.geolocation.watchPosition(pos => {
-    const { latitude, longitude } = pos.coords;
-    if (!map) {
-      map = L.map('map').setView([latitude, longitude], 16);
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
-      }).addTo(map);
-      const flagIcon = L.icon({
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/25/25694.png',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32]
-      });
-      marker = L.marker([latitude, longitude], { icon: flagIcon })
-        .addTo(map)
-        .bindPopup('📍 You are here')
-        .openPopup();
-    } else {
-      marker.setLatLng([latitude, longitude]);
-      map.panTo([latitude, longitude]);
-    }
-  }, err => alert('Geolocation error: ' + err.message), {
-    enableHighAccuracy: true, maximumAge: 10000, timeout: 5000
-  });
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  document.body.addEventListener('click', permissionFlow, { once: true });
-  startMap();
-});
