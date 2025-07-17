@@ -31,6 +31,7 @@ body {
   background: red;
   transform: translateX(-50%) rotate(0deg);
   transform-origin: bottom center;
+  transition: transform 0.2s ease-out;
 }
 
 #direction {
