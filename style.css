@@ -1,0 +1,39 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: sans-serif;
+  background: #f0f0f0;
+}
+
+.compass-container {
+  text-align: center;
+}
+
+.compass {
+  width: 200px;
+  height: 200px;
+  border: 10px solid #333;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto;
+  background: radial-gradient(circle, #fff 60%, #ccc 100%);
+}
+
+.needle {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 4px;
+  height: 90px;
+  background: red;
+  transform: translateX(-50%) rotate(0deg);
+  transform-origin: bottom center;
+}
+
+#direction {
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
