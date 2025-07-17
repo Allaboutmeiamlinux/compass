@@ -29,7 +29,7 @@ function handleOrientation(event) {
         holdTimer = setTimeout(() => {
           flag.classList.remove("hidden");
           flagShown = true;
-        }, 5000);
+        }, 3000);
       }
     } else {
       clearTimeout(holdTimer);
